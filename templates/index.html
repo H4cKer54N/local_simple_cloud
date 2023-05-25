@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div id="uploadModal" class="modal">
+        <div class="modal-content">
+          <h2>Uploading file...</h2>
+          <p>Please wait until the upload is completed.</p>
+        </div>
+      </div>
+    <!-- The Modal -->
+<div id="myModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img01">
+  </div>
+      <!-- The Modal -->
+
+    <form action="/upload/" method="post"  id="uploadForm" enctype="multipart/form-data">
+        <input name="files" type="file" multiple>
+        <input type="submit">
+    </form>
+    <br>
+    <table>
+        <tr>
+            <th>File Name</th>
+            <th>Size</th>
+            <th>Last Modified</th>
+            <th>Preview</th>
+            <th>Action</th>
+        </tr>
+        {% for file in file_details %}
+        <tr>
+            <td><a href="/download/{{ file.name }}" target="_blank">{{ file.name }}</a></td>
+            <td>{{ file.size }}</td>
+            <td>{{ file.last_modified }}</td>
+            <td>
+                {% if file.name.endswith(('.png', '.jpg', '.jpeg')) %}
+                    <img id="myImg" src="/download/{{ file.name }}" width="100">
+                {% elif file.name.endswith('.mp4') %}
+                    <video src="/download/{{ file.name }}" width="100" controls></video>
+                {% else %}
+                    No preview available
+                {% endif %}
+            </td>
+            <td>
+                <!-- New delete button -->
+                <button onclick="deleteFile('{{ file.name }}')">Delete</button>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script src="/static/scripts.js"></script>
+</body>
+</html>
